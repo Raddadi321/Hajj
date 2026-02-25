@@ -200,8 +200,9 @@
   const start = async () => {
     state.mode = parseMode();
     $("footerUrl").textContent = location.href;
-
-    const res = await fetch("content.json", { cache: "no-store" });
+const base = location.pathname.endsWith("/") ? location.pathname : location.pathname.replace(/[^/]+$/, "");
+const res = await fetch(base + "content.json", { cache: "no-store" });
+   
     state.content = await res.json();
 
     // brand
