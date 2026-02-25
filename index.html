@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الماسية — عرض الشاشات</title>
+  <meta name="theme-color" content="#259A49" />
+  <!-- تحديث تلقائي اختياري (للاحتياط): غيّر 300 إلى عدد الثواني أو احذف السطر -->
+  <meta http-equiv="refresh" content="300" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand__logo" src="assets/logo.jpg" alt="شعار الماسية" />
+        <div class="brand__text">
+          <div class="brand__name" id="brandName">الماسية</div>
+          <div class="brand__sub" id="brandSub">Digital Display</div>
+        </div>
+      </div>
+
+      <div class="status">
+        <div class="pill" id="modePill">PLAYLIST</div>
+        <div class="clock" id="clock">--:--</div>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="panel" id="panel"></section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__hint" id="footerHint">للتحكم: ?mode=playlist | ads | numbers | live | static</div>
+      <div class="footer__url" id="footerUrl"></div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
