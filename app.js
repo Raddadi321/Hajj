@@ -201,7 +201,7 @@
     state.mode = parseMode();
     $("footerUrl").textContent = location.href;
 
-    const res = await fetch("data/content.json", { cache: "no-store" });
+    const res = await fetch("content.json", { cache: "no-store" });
     state.content = await res.json();
 
     // brand
@@ -235,7 +235,7 @@
     $("panel").innerHTML = `
       <div class="view">
         <h1 class="h1">تعذر تحميل المحتوى</h1>
-        <p class="sub">تأكد أن ملفات GitHub Pages تعمل وأن data/content.json موجود.</p>
+        <p class="sub">تأكد أن ملفات GitHub Pages تعمل وأن content.json موجود.</p>
         <pre style="white-space:pre-wrap; color:#B8C7BC">${String(err)}</pre>
       </div>
     `;
