@@ -56,7 +56,7 @@
           "unit": "دقيقة"
         }
       ],
-      "note": "يمكنك تعديل الأرقام من ملف data/content.json"
+      "note": "يمكنك تعديل الأرقام من ملف content.json"
     },
     {
       "id": "live",
