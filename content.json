@@ -1,0 +1,77 @@
+{
+  "brand": {
+    "name_ar": "الماسية",
+    "name_en": "almasiah",
+    "primary": "#259A49",
+    "dark": "#0F1A12"
+  },
+  "playlist_seconds": 20,
+  "sections": [
+    {
+      "id": "ads",
+      "title": "إعلانات",
+      "type": "slideshow",
+      "interval_seconds": 8,
+      "slides": [
+        {
+          "title": "مرحبا بكم",
+          "subtitle": "عروضنا تتحدث باستمرار",
+          "badge": "جديد"
+        },
+        {
+          "title": "خدمات متكاملة",
+          "subtitle": "جودة • سرعة • التزام",
+          "badge": "أفضل اختيار"
+        },
+        {
+          "title": "تواصل معنا",
+          "subtitle": "الهاتف: 05XXXXXXXX — البريد: info@example.com",
+          "badge": "اتصل الآن"
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "لوحة أرقام",
+      "type": "kpi",
+      "items": [
+        {
+          "label": "عدد العملاء اليوم",
+          "value": 128,
+          "unit": ""
+        },
+        {
+          "label": "الطلبات قيد التنفيذ",
+          "value": 14,
+          "unit": ""
+        },
+        {
+          "label": "نسبة الالتزام",
+          "value": 98,
+          "unit": "%"
+        },
+        {
+          "label": "متوسط وقت الخدمة",
+          "value": 12,
+          "unit": "دقيقة"
+        }
+      ],
+      "note": "يمكنك تعديل الأرقام من ملف data/content.json"
+    },
+    {
+      "id": "live",
+      "title": "بث مباشر",
+      "type": "embed",
+      "embed_url": "https://www.youtube.com/embed/live_stream?channel=CHANNEL_ID&autoplay=1&mute=1",
+      "hint": "استبدل CHANNEL_ID بمعرّف قناتك، أو ضع رابط بث آخر يدعم embed"
+    },
+    {
+      "id": "static",
+      "title": "عرض ثابت",
+      "type": "poster",
+      "headline": "الماسية",
+      "text": "اكتب هنا أي رسالة ثابتة — تعليمات، ترحيب، ساعات العمل، أو أي نص.",
+      "footer": "يتم تحديث المحتوى تلقائياً عند تعديل ملف content.json وإعادة تحميل الصفحة."
+    }
+  ]
+}
