@@ -14,7 +14,7 @@
       "interval_seconds": 8,
       "slides": [
         {
-          "title": "مرحبا بكم",
+          "title": "مرحبا بكم في شركة مشارق الماسية",
           "subtitle": "عروضنا تتحدث باستمرار",
           "badge": "جديد"
         },
@@ -62,7 +62,7 @@
       "id": "live",
       "title": "بث مباشر",
       "type": "embed",
-      "embed_url": "https://www.youtube.com/watch?v=EahWB7XQfH0",
+      "embed_url": "<iframe width=\"1335\" height=\"751\" src=\"https://www.youtube.com/embed/9A1S0xAPVIs\" title=\"بث مباشر | قناة السنة النبوية\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "hint": "استبدل CHANNEL_ID بمعرّف قناتك، أو ضع رابط بث آخر يدعم embed"
     },
     {
