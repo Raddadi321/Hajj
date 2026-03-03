@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>محرر المحتوى — حفظ مباشر إلى GitHub</title>
+  <style>
+    :root{--p:#259A49;--bg:#0b0f0c;--card:#121a14;--t:#f3f6f4;--m:#b8c7bc}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial;background:linear-gradient(180deg,#070a08,var(--bg));color:var(--t)}
+    header{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand img{height:40px;border-radius:10px;background:#fff;padding:6px}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px}
+    h2{margin:0 0 10px;font-size:18px}
+    label{display:block;color:var(--m);font-size:13px;margin:10px 0 6px}
+    input,textarea,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.30);color:var(--t);outline:none}
+    textarea{min-height:90px;resize:vertical}
+    .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    button{cursor:pointer;border:0;border-radius:12px;padding:10px 14px;font-weight:700}
+    .primary{background:var(--p);color:#06210f}
+    .ghost{background:rgba(255,255,255,.07);color:var(--t);border:1px solid rgba(255,255,255,.10)}
+    .danger{background:rgba(255,70,70,.14);color:#ffdcdc;border:1px solid rgba(255,70,70,.25)}
+    .muted{color:var(--m);font-size:13px;margin-top:6px;line-height:1.6}
+    .item{border:1px dashed rgba(255,255,255,.14);border-radius:14px;padding:12px;margin-top:10px}
+    .itemHead{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(37,154,73,.14);border:1px solid rgba(37,154,73,.25)}
+    .ok{color:#bff2d0}
+    .warn{color:#ffd7a8}
+    a{color:#bff2d0}
+    @media (max-width:720px){ .row{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <img src="logo.jpg" alt="logo">
+    <div>
+      <div style="font-weight:800">محرر المحتوى</div>
+      <div class="muted">تعديل سهل + حفظ (Commit) مباشر إلى GitHub</div>
+    </div>
+  </div>
+  <div class="btns">
+    <a class="ghost" style="text-decoration:none;display:inline-flex;align-items:center" href="./" target="_blank">فتح صفحة الشاشات</a>
+    <button class="ghost" id="btnReload">إعادة تحميل</button>
+    <button class="primary" id="btnSave">حفظ إلى GitHub (Commit)</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>إعدادات الحفظ إلى GitHub</h2>
+    <div class="row">
+      <div>
+        <label>Owner</label>
+        <input id="owner" value="raddadi321" />
+      </div>
+      <div>
+        <label>Repo</label>
+        <input id="repo" value="Hajj" />
+      </div>
+      <div>
+        <label>Branch</label>
+        <input id="branch" value="main" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div style="grid-column: span 2;">
+        <label>GitHub Token (Fine-grained PAT)</label>
+        <input id="token" type="password" placeholder="ghp_... أو github_pat_..." />
+        <div class="muted warn">لا تحفظ التوكن داخل الكود. اكتبه هنا فقط وقت الحفظ.</div>
+      </div>
+      <div>
+        <label>مسار الملف</label>
+        <input id="path" value="content.json" />
+        <div class="muted">اتركه content.json لأنه عندك بالجذر.</div>
+      </div>
+    </div>
+
+    <label>رسالة الـ Commit</label>
+    <input id="message" value="Update content.json via editor" />
+
+    <div class="muted">
+      لازم التوكن يكون له صلاحية <b>Contents: Read and write</b> على الريبو فقط. :contentReference[oaicite:2]{index=2}
+    </div>
+
+    <div class="muted" id="status"></div>
+  </div>
+
+  <div class="grid" id="ui"></div>
+</div>
+
+<script>
+(() => {
+  const ui = document.getElementById("ui");
+  const statusEl = document.getElementById("status");
+  let model = null;
+
+  const setStatus = (txt, cls="") => {
+    statusEl.className = "muted " + cls;
+    statusEl.textContent = txt || "";
+  };
+
+  const el = (tag, attrs={}, children=[]) => {
+    const e = document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v]) => {
+      if (k === "class") e.className = v;
+      else if (k === "html") e.innerHTML = v;
+      else e.setAttribute(k, v);
+    });
+    children.forEach(c => e.appendChild(c));
+    return e;
+  };
+
+  const input = (value="", onInput=()=>{}, type="text") => {
+    const i = el("input", { type, value });
+    i.addEventListener("input", () => onInput(i.value));
+    return i;
+  };
+
+  const textarea = (value="", onInput=()=>{}) => {
+    const t = el("textarea");
+    t.value = value;
+    t.addEventListener("input", () => onInput(t.value));
+    return t;
+  };
+
+  const field = (labelText, control) => {
+    const w = el("div");
+    w.appendChild(el("label", { html: labelText }));
+    w.appendChild(control);
+    return w;
+  };
+
+  const sectionById = (id) => model.sections.find(s => s.id === id);
+
+  const rebuild = () => {
+    ui.innerHTML = "";
+    if (!model) return;
+
+    ui.appendChild(renderSlideshow(sectionById("ads")));
+    ui.appendChild(renderKpis(sectionById("numbers")));
+    ui.appendChild(renderLive(sectionById("live")));
+    ui.appendChild(renderStatic(sectionById("static")));
+  };
+
+  const renderSlideshow = (sec) => {
+    const card = el("div", { class: "card" });
+    card.appendChild(el("div", { class: "itemHead" }, [
+      el("h2", {}, [document.createTextNode("الإعلانات (سلايدات)")]),
+      el("div", { class: "pill" , html: "mode=ads" })
+    ]));
+    card.appendChild(el("div", { class:"muted", html:"أضف/عدّل سلايدات الإعلان. العنوان + وصف + شارة (اختياري)." }));
+
+    const list = el("div");
+    const redraw = () => {
+      list.innerHTML = "";
+      sec.slides = sec.slides || [];
+      sec.slides.forEach((s, idx) => {
+        const box = el("div", { class:"item" });
+
+        box.appendChild(el("div", { class:"itemHead" }, [
+          el("div", { class:"pill", html: `سلايد ${idx+1}` }),
+          (() => {
+            const b = el("button", { class:"danger" });
+            b.textContent = "حذف";
+            b.onclick = () => { sec.slides.splice(idx,1); redraw(); };
+            return b;
+          })()
+        ]));
+
+        const row = el("div", { class:"row" });
+        row.appendChild(field("العنوان", input(s.title||"", v => s.title=v)));
+        row.appendChild(field("الشارة", input(s.badge||"", v => s.badge=v)));
+        row.appendChild(field("مدة السلايد (ثواني)", input(String(sec.interval_seconds||8), v => sec.interval_seconds = Number(v||8), "number")));
+        box.appendChild(row);
+
+        box.appendChild(field("الوصف", textarea(s.subtitle||"", v => s.subtitle=v)));
+        list.appendChild(box);
+      });
+    };
+
+    redraw();
+
+    const addBtn = el("button", { class:"ghost" });
+    addBtn.textContent = "إضافة سلايد";
+    addBtn.onclick = () => { sec.slides.push({title:"", subtitle:"", badge:""}); redraw(); };
+
+    card.appendChild(list);
+    card.appendChild(el("div", { class:"btns" }, [addBtn]));
+    return card;
+  };
+
+  const renderKpis = (sec) => {
+    const card = el("div", { class:"card" });
+    card.appendChild(el("div", { class:"itemHead" }, [
+      el("h2", {}, [document.createTextNode("لوحة الأرقام (KPI)")]),
+      el("div", { class:"pill", html:"mode=numbers" })
+    ]));
+    card.appendChild(el("div", { class:"muted", html:"عدّل الأرقام بسهولة. يفضّل 4 عناصر." }));
+
+    const list = el("div");
+    const redraw = () => {
+      list.innerHTML = "";
+      sec.items = sec.items || [];
+      sec.items.forEach((it, idx) => {
+        const box = el("div", { class:"item" });
+        box.appendChild(el("div", { class:"itemHead" }, [
+          el("div", { class:"pill", html:`رقم ${idx+1}` }),
+          (() => {
+            const b = el("button", { class:"danger" });
+            b.textContent = "حذف";
+            b.onclick = () => { sec.items.splice(idx,1); redraw(); };
+            return b;
+          })()
+        ]));
+        const row = el("div", { class:"row" });
+        row.appendChild(field("اسم الرقم", input(it.label||"", v => it.label=v)));
+        row.appendChild(field("القيمة", input(String(it.value ?? ""), v => it.value = isNaN(Number(v)) ? v : Number(v))));
+        row.appendChild(field("الوحدة", input(it.unit||"", v => it.unit=v)));
+        box.appendChild(row);
+        list.appendChild(box);
+      });
+    };
+    redraw();
+
+    const addBtn = el("button", { class:"ghost" });
+    addBtn.textContent = "إضافة رقم";
+    addBtn.onclick = () => { sec.items.push({label:"", value:0, unit:""}); redraw(); };
+
+    card.appendChild(list);
+    card.appendChild(el("div", { class:"btns" }, [addBtn]));
+    return card;
+  };
+
+  const renderLive = (sec) => {
+    const card = el("div", { class:"card" });
+    card.appendChild(el("div", { class:"itemHead" }, [
+      el("h2", {}, [document.createTextNode("البث المباشر")]),
+      el("div", { class:"pill", html:"mode=live" })
+    ]));
+    card.appendChild(field("رابط Embed", input(sec.embed_url||"", v => sec.embed_url=v)));
+    card.appendChild(field("ملاحظة/تعليمات", textarea(sec.hint||"", v => sec.hint=v)));
+    return card;
+  };
+
+  const renderStatic = (sec) => {
+    const card = el("div", { class:"card" });
+    card.appendChild(el("div", { class:"itemHead" }, [
+      el("h2", {}, [document.createTextNode("عرض ثابت")]),
+      el("div", { class:"pill", html:"mode=static" })
+    ]));
+    card.appendChild(field("العنوان الكبير", input(sec.headline||"", v => sec.headline=v)));
+    card.appendChild(field("النص", textarea(sec.text||"", v => sec.text=v)));
+    card.appendChild(field("تذييل صغير", textarea(sec.footer||"", v => sec.footer=v)));
+    return card;
+  };
+
+  const load = async () => {
+    setStatus("جاري تحميل المحتوى…");
+    const res = await fetch("content.json", { cache:"no-store" });
+    model = await res.json();
+    rebuild();
+    setStatus("تم التحميل ✅", "ok");
+  };
+
+  // GitHub API helpers
+  const b64 = (str) => btoa(unescape(encodeURIComponent(str)));
+
+  const ghHeaders = (token) => ({
+    "Authorization": `Bearer ${token}`,
+    "Accept": "application/vnd.github+json",
+    "Content-Type": "application/json",
+  });
+
+  const saveToGitHub = async () => {
+    const owner = document.getElementById("owner").value.trim();
+    const repo = document.getElementById("repo").value.trim();
+    const branch = document.getElementById("branch").value.trim() || "main";
+    const path = document.getElementById("path").value.trim() || "content.json";
+    const token = document.getElementById("token").value.trim();
+    const message = document.getElementById("message").value.trim() || "Update content.json";
+
+    if (!owner || !repo || !token) {
+      setStatus("⚠️ تأكد من Owner/Repo/Token", "warn");
+      return;
+    }
+
+    setStatus("جاري الحصول على SHA للملف…");
+    // 1) GET file to obtain SHA
+    const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+    const r1 = await fetch(getUrl, { headers: ghHeaders(token) });
+
+    if (!r1.ok) {
+      const t = await r1.text();
+      throw new Error(`GET failed (${r1.status}): ${t}`);
+    }
+
+    const meta = await r1.json();
+    const sha = meta.sha;
+
+    setStatus("جاري حفظ التعديلات (Commit)…");
+    // 2) PUT updated content with sha
+    const putUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+    const body = {
+      message,
+      content: b64(JSON.stringify(model, null, 2)),
+      sha,
+      branch,
+    };
+
+    const r2 = await fetch(putUrl, {
+      method: "PUT",
+      headers: ghHeaders(token),
+      body: JSON.stringify(body),
+    });
+
+    if (!r2.ok) {
+      const t = await r2.text();
+      throw new Error(`PUT failed (${r2.status}): ${t}`);
+    }
+
+    setStatus("تم الحفظ ✅ (Commit مباشر). حدّث الشاشات أو انتظر التحديث التلقائي.", "ok");
+  };
+
+  document.getElementById("btnReload").onclick = () => load().catch(e => setStatus("خطأ تحميل: " + e, "warn"));
+  document.getElementById("btnSave").onclick = () => {
+    saveToGitHub().catch(e => setStatus("خطأ حفظ: " + e.message, "warn"));
+  };
+
+  load().catch(err => setStatus("تعذر تحميل content.json: " + err, "warn"));
+})();
+</script>
+</body>
+</html>
