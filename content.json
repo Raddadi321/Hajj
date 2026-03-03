@@ -62,7 +62,7 @@
       "id": "live",
       "title": "بث مباشر",
       "type": "embed",
-      "embed_url": "<iframe width=\"1335\" height=\"751\" src=\"https://www.youtube.com/embed/9A1S0xAPVIs\" title=\"بث مباشر | قناة السنة النبوية\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "embed_url": "https://youtu.be/9A1S0xAPVIs",
       "hint": "استبدل CHANNEL_ID بمعرّف قناتك، أو ضع رابط بث آخر يدعم embed"
     },
     {
