@@ -11,10 +11,10 @@
       "id": "ads",
       "title": "إعلانات",
       "type": "slideshow",
-      "interval_seconds": 8,
+      "interval_seconds": 4,
       "slides": [
         {
-          "title": "مرحبا بكم في شركة مشارق الماسية",
+          "title": " شركة مشارق الماسية - المدينة المنورة",
           "subtitle": "عروضنا تتحدث باستمرار",
           "badge": "جديد"
         },
@@ -36,14 +36,14 @@
       "type": "kpi",
       "items": [
         {
-          "label": "عدد العملاء اليوم",
+          "label": "القدوم اليوم",
           "value": 128,
-          "unit": ""
+          "unit": "حاج من الجنسية ..."
         },
         {
-          "label": "الطلبات قيد التنفيذ",
-          "value": 14,
-          "unit": ""
+          "label": "المغادرة اليوم",
+          "value": 350,
+          "unit": "حاج من الجنسية ..."
         },
         {
           "label": "نسبة الالتزام",
@@ -62,7 +62,7 @@
       "id": "live",
       "title": "بث مباشر",
       "type": "embed",
-      "embed_url": "https://youtu.be/9A1S0xAPVIs",
+      "embed_url": "<iframe width=\"1335\" height=\"751\" src=\"https://www.youtube.com/embed/zDQIWfvwBIs\" title=\"🔴 Makkah Live | مكة مباشر | الحرم المكي مباشر | قناة القران الكريم السعودية مباشر | مكه المكرمه\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "hint": "استبدل CHANNEL_ID بمعرّف قناتك، أو ضع رابط بث آخر يدعم embed"
     },
     {
