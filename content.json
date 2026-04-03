@@ -62,7 +62,7 @@
       "id": "live",
       "title": "بث مباشر",
       "type": "embed",
-      "embed_url": "<iframe width=\"1335\" height=\"751\" src=\"https://www.youtube.com/embed/zDQIWfvwBIs\" title=\"🔴 Makkah Live | مكة مباشر | الحرم المكي مباشر | قناة القران الكريم السعودية مباشر | مكه المكرمه\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "embed_url": "<iframe width=\"1338\" height=\"751\" src=\"https://www.youtube.com/embed/t20qaLOsT8g?list=PLrmeu8iUP5jocg-cH4sZ5Stq7xCj_MZvZ\" title=\"سورة القصص ليلة 23 رمضان 1443هـ الشيخ علي صلاح عمر\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "hint": "استبدل CHANNEL_ID بمعرّف قناتك، أو ضع رابط بث آخر يدعم embed"
     },
     {
